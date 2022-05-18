@@ -9,11 +9,15 @@
 * Create a directory to work in: `mkdir /tmp/fermwork`, and change your working directory to it
 * Download ferm source package: `apt source ferm`
 
-## Apply patches
+## Push patches
 
-Apply all patches with:
+Push all patches with:
 
-    make apply
+    make push
+
+Pop all patches with:
+
+    make clean
 
 ## Build package
 
@@ -21,7 +25,7 @@ First, change the working directory to the ferm source directory (`cd ferm-2.5.1
 
 Update the version number, changelog and distribution value:
 
-    DEBFULLNAME='William Edwards' DEBEMAIL=wedwards@cyberfusion.nl dch --local cyberfusion
+    dch --local cyberfusion
 
 Build the package with:
 
