@@ -1,0 +1,37 @@
+From: William Edwards <wedwards@cyberfusion.nl>
+Date: Wed, 18 May 2022 11:45:37 +0200
+Subject: [PATCH] Call nftables tools instead of legacy xtables tools
+
+On 'regular' >= Debian Buster systems, the alternative for xtables is
+xtables-nft. These are compatibility layers to use the nf_tables backend
+with xtables tooling and syntax. In commit 47b78b6, the behaviour of ferm
+was changed to use the xtables backends to be used, rather than the nftables
+compatibility layers. This change reverts that behaviour.
+---
+ src/ferm | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/src/ferm b/src/ferm
+index 47fed83..897fffd 100755
+--- a/src/ferm
++++ b/src/ferm
+@@ -882,16 +882,6 @@ sub find_tool($) {
+     return $name if $option{test};
+     my @path = ('/usr/sbin', '/sbin', split ':', $ENV{PATH});
+ 
+-    if ($name =~ /^(.*tables)(.*)$/) {
+-        # prefer the "legacy" xtables tools the new nft based tools
+-        # are incompatible and sometimes break ferm
+-        my $legacy_name = $1 . '-legacy' . $2;
+-        foreach my $path (@path) {
+-            my $ret = "$path/$legacy_name";
+-            return $ret if -x $ret;
+-        }
+-    }
+-
+     foreach my $path (@path) {
+         my $ret = "$path/$name";
+         return $ret if -x $ret;
+-- 
+2.30.1 (Apple Git-130)
+
